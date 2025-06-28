@@ -47,5 +47,37 @@ class Business(EconomicEntity):
             'profit': profit,
             'utilization': production / self.capacity
         }
-    
+
+class Business(EconomicEntity):
+    def __init__(self, name: str, production_capacity: float):
+        self.name = name
+        self.capacity = production_capacity
+        
+    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
+        demand = economy_state.get('demand', 100)
+        interest = economy_state.get('interest', 0.05)
+        
+        production = min(self.capacity, demand * (1 - interest))
+        profit = production * 0.2  # Simple 20% margin
+        
+        return {
+            'agent_type': 'Business',
+            'name': self.name,
+            'production': production,
+            'profit': profit,
+            'utilization': production / self.capacity
+        }
+
+class Government(EconomicEntity):
+    def __init__(self, tax_rate: float):
+        self.tax_rate = tax_rate
+        
+    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
+        gdp = economy_state.get('gdp', 1000)
+        tax_revenue = gdp * self.tax_rate
+        return {
+            'agent_type': 'Government',
+            'tax_revenue': tax_revenue,
+            'new_tax_rate': self.tax_rate
+        }
 
