@@ -57,3 +57,35 @@ class Economy:
         self.state['interest'] = 0.02 + (self.state['inflation'] * 0.5)
         
         print("New state:", {k: round(v, 2) for k, v in self.state.items()})
+
+def main():
+    economy = Economy()
+    
+    # Get user inputs
+    print("Welcome to Simple Economy Simulator")
+    
+    # Set initial economy state
+    print("\nSet initial economy conditions:")
+    economy.state['inflation'] = float(input("Inflation rate (0.0-1.0): "))
+    economy.state['wage'] = float(input("Base wage: "))
+    economy.state['demand'] = float(input("Initial demand: "))
+    economy.state['interest'] = float(input("Interest rate (0.0-1.0): "))
+    
+    # Add consumers
+    num_consumers = int(input("\nNumber of consumers: "))
+    for i in range(num_consumers):
+        savings = float(input(f"Consumer {i+1} initial savings: "))
+        economy.add_agent(Consumer(savings))
+    
+    # Add businesses
+    num_businesses = int(input("\nNumber of businesses: "))
+    for i in range(num_businesses):
+        economy.add_agent(Business())
+    
+    # Run simulation
+    cycles = int(input("\nNumber of cycles to run: "))
+    for _ in range(cycles):
+        economy.run_cycle()
+
+if __name__ == "__main__":
+    main()
