@@ -1,1 +1,1 @@
-Just a simple demostration of the ecomony using python
+Just a simple demostration of the economy using python.
