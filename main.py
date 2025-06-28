@@ -36,7 +36,7 @@ class Economy:
             'interest': 0.05
         }
         def add_agent(self, agent: Agent):
-        self.agents.append(agent)
+            self.agents.append(agent)
     
     def run_cycle(self):
         print("\n--- Economic Cycle ---")
