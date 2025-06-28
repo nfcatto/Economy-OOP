@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
+from typing import Dict, List
 
-class EconomicAgent(ABC):
+class EconomicEntity(ABC):
+    """Base class for all economic entities"""
     @abstractmethod
-    def act(self, economy_state: dict) -> dict:
-        """Take action based on economic conditions"""
+    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
         pass
 
 class Consumer(EconomicEntity):
@@ -26,3 +27,25 @@ class Consumer(EconomicEntity):
             'new_savings': self.savings,
             'savings_rate': savings_rate
         }
+    
+class Business(EconomicEntity):
+    def __init__(self, name: str, production_capacity: float):
+        self.name = name
+        self.capacity = production_capacity
+        
+    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
+        demand = economy_state.get('demand', 100)
+        interest = economy_state.get('interest', 0.05)
+        
+        production = min(self.capacity, demand * (1 - interest))
+        profit = production * 0.2  # Simple 20% margin
+        
+        return {
+            'agent_type': 'Business',
+            'name': self.name,
+            'production': production,
+            'profit': profit,
+            'utilization': production / self.capacity
+        }
+    
+
