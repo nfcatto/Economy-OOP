@@ -35,3 +35,25 @@ class Economy:
             'demand': 100,
             'interest': 0.05
         }
+        def add_agent(self, agent: Agent):
+        self.agents.append(agent)
+    
+    def run_cycle(self):
+        print("\n--- Economic Cycle ---")
+        
+        # Agents act
+        actions = []
+        for agent in self.agents:
+            action = agent.act(self.state)
+            actions.append(action)
+            print(f"{type(agent).__name__}: {action}")
+        
+        # Update state
+        total_spend = sum(a['spend'] for a in actions if 'spend' in a)
+        total_produce = sum(a['produce'] for a in actions if 'produce' in a)
+        
+        self.state['demand'] = total_spend * 0.9
+        self.state['inflation'] = min(0.1, total_spend / (total_produce + 1))
+        self.state['interest'] = 0.02 + (self.state['inflation'] * 0.5)
+        
+        print("New state:", {k: round(v, 2) for k, v in self.state.items()})
