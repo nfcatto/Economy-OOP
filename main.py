@@ -1,83 +1,19 @@
-from abc import ABC, abstractmethod
 from typing import Dict, List
 
-class EconomicEntity(ABC):
-    """Base class for all economic entities"""
-    @abstractmethod
-    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
+class Agent:
+    def act(self, state: Dict[str, float]) -> Dict[str, float]:
         pass
 
-class Consumer(EconomicEntity):
-    def __init__(self, name: str, initial_savings: float):
-        self.name = name
-        self.savings = initial_savings
+class Consumer(Agent):
+    def __init__(self, savings: float = 1000):
+        self.savings = savings
         
-    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
-        inflation = economy_state.get('inflation', 0.02)
-        wage = economy_state.get('wage', 50)
+    def act(self, state: Dict[str, float]) -> Dict[str, float]:
+        inflation = state['inflation']
+        wage = state['wage']
         
-        savings_rate = max(0.1, 0.2 - inflation)  # At least 10% savings
-        self.savings += wage * savings_rate
-        spending = wage * (1 - savings_rate)
+        save_rate = max(0.1, 0.2 - inflation)
+        self.savings += wage * save_rate
+        spend = wage * (1 - save_rate)
         
-        return {
-            'agent_type': 'Consumer',
-            'name': self.name,
-            'spending': spending,
-            'new_savings': self.savings,
-            'savings_rate': savings_rate
-        }
-    
-class Business(EconomicEntity):
-    def __init__(self, name: str, production_capacity: float):
-        self.name = name
-        self.capacity = production_capacity
-        
-    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
-        demand = economy_state.get('demand', 100)
-        interest = economy_state.get('interest', 0.05)
-        
-        production = min(self.capacity, demand * (1 - interest))
-        profit = production * 0.2  # Simple 20% margin
-        
-        return {
-            'agent_type': 'Business',
-            'name': self.name,
-            'production': production,
-            'profit': profit,
-            'utilization': production / self.capacity
-        }
-
-class Business(EconomicEntity):
-    def __init__(self, name: str, production_capacity: float):
-        self.name = name
-        self.capacity = production_capacity
-        
-    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
-        demand = economy_state.get('demand', 100)
-        interest = economy_state.get('interest', 0.05)
-        
-        production = min(self.capacity, demand * (1 - interest))
-        profit = production * 0.2  # Simple 20% margin
-        
-        return {
-            'agent_type': 'Business',
-            'name': self.name,
-            'production': production,
-            'profit': profit,
-            'utilization': production / self.capacity
-        }
-
-class Government(EconomicEntity):
-    def __init__(self, tax_rate: float):
-        self.tax_rate = tax_rate
-        
-    def calculate(self, economy_state: Dict[str, float]) -> Dict[str, float]:
-        gdp = economy_state.get('gdp', 1000)
-        tax_revenue = gdp * self.tax_rate
-        return {
-            'agent_type': 'Government',
-            'tax_revenue': tax_revenue,
-            'new_tax_rate': self.tax_rate
-        }
-
+        return {'spend': spend, 'saved': self.savings}
