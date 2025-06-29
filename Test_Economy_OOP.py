@@ -30,8 +30,8 @@ class TestEconomy(unittest.TestCase):
         
         # Run one cycle
         economy.run_cycle()
+
         
-        # Verify state changed
         self.assertNotEqual(economy.state['demand'], 100)  # Initial demand was 100
         self.assertTrue(economy.state['inflation'] > 0.02)  # Inflation should increase
 
