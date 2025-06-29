@@ -72,13 +72,13 @@ def main():
     economy.state['interest'] = float(input("Interest rate (0.0-1.0): "))
     
     # Add consumers
-    num_consumers = int(input("\nNumber of consumers: "))
+    num_consumers = int(input("\nNumber of consumers in the economy: "))
     for i in range(num_consumers):
         savings = float(input(f"Consumer {i+1} initial savings: "))
         economy.add_agent(Consumer(savings))
     
     # Add businesses
-    num_businesses = int(input("\nNumber of businesses: "))
+    num_businesses = int(input("\nNumber of businesses in the economy: "))
     for i in range(num_businesses):
         economy.add_agent(Business())
     
