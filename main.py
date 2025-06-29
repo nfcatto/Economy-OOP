@@ -83,7 +83,7 @@ def main():
         economy.add_agent(Business())
     
     # Run simulation
-    cycles = int(input("\nNumber of cycles to run: "))
+    cycles = int(input("\n How many times do you want to test? "))
     for _ in range(cycles):
         economy.run_cycle()
 
